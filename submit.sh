@@ -38,9 +38,29 @@ fi
 
 if [ "$PASS" = true ]; then
   echo ""
-  echo "🎉 Congratulations! All checkpoints complete."
-  echo "Your submission is being processed..."
-  echo "You will receive your Leapr AI Governance badge by email shortly."
+  echo "🎉 All checkpoints complete! Submitting your project..."
+  
+  read -p "Enter your full name: " USER_NAME
+  read -p "Enter your email address: " USER_EMAIL
+  read -p "Enter your Leapr auth token (find it in Leapr app settings): " AUTH_TOKEN
+
+  RESPONSE=$(curl -s -X POST "https://rlefumadvzpijgxjogoo.supabase.co/functions/v1/issue-badge" \
+    -H "Authorization: Bearer $AUTH_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "{\"name\": \"$USER_NAME\", \"email\": \"$USER_EMAIL\"}")
+
+  SUCCESS=$(echo $RESPONSE | grep -o '"success":true')
+
+  if [ -n "$SUCCESS" ]; then
+    echo ""
+    echo "✅ Your Leapr AI Governance Practitioner badge is on its way!"
+    echo "📧 Check your email at $USER_EMAIL"
+    echo "🔗 Add it directly to your LinkedIn profile."
+  else
+    echo ""
+    echo "❌ Something went wrong. Please contact support@leapr.co"
+    echo "Error: $RESPONSE"
+  fi
 else
   echo ""
   echo "Please complete the remaining checkpoints and run this script again."
