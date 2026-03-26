@@ -4,7 +4,6 @@ echo "🔍 Checking your completed work..."
 
 PASS=true
 
-# Check checkpoint 1
 if grep -q "| 1 |  |" checkpoint-1-risk-assessment.md; then
   echo "❌ Checkpoint 1 incomplete — please fill in your risk matrix"
   PASS=false
@@ -12,7 +11,6 @@ else
   echo "✅ Checkpoint 1 complete"
 fi
 
-# Check checkpoint 2
 if grep -q "\[Write 2-3 sentences" checkpoint-2-policy.md; then
   echo "❌ Checkpoint 2 incomplete — please complete your policy"
   PASS=false
@@ -20,7 +18,6 @@ else
   echo "✅ Checkpoint 2 complete"
 fi
 
-# Check checkpoint 3
 if grep -q "Step 1:  " checkpoint-3-oversight.md; then
   echo "❌ Checkpoint 3 incomplete — please complete your oversight protocol"
   PASS=false
@@ -28,7 +25,6 @@ else
   echo "✅ Checkpoint 3 complete"
 fi
 
-# Check checkpoint 4
 if grep -q "\[Where?\]" checkpoint-4-audit.md; then
   echo "❌ Checkpoint 4 incomplete — please complete your audit framework"
   PASS=false
@@ -39,15 +35,15 @@ fi
 if [ "$PASS" = true ]; then
   echo ""
   echo "🎉 All checkpoints complete! Submitting your project..."
-  
+  echo ""
   read -p "Enter your full name: " USER_NAME
   read -p "Enter your email address: " USER_EMAIL
-  read -p "Enter your Leapr auth token (find it in Leapr app settings): " AUTH_TOKEN
+  read -p "Enter your Leapr User ID: " USER_ID
+  read -p "Enter your Leapr Project Secret: " PROJECT_SECRET
 
   RESPONSE=$(curl -s -X POST "https://rlefumadvzpijgxjogoo.supabase.co/functions/v1/issue-badge" \
-    -H "Authorization: Bearer $AUTH_TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"name\": \"$USER_NAME\", \"email\": \"$USER_EMAIL\"}")
+    -d "{\"name\": \"$USER_NAME\", \"email\": \"$USER_EMAIL\", \"user_id\": \"$USER_ID\", \"project_secret\": \"$PROJECT_SECRET\", \"project_id\": \"ai-governance\"}")
 
   SUCCESS=$(echo $RESPONSE | grep -o '"success":true')
 
@@ -59,7 +55,7 @@ if [ "$PASS" = true ]; then
   else
     echo ""
     echo "❌ Something went wrong. Please contact support@leapr.co"
-    echo "Error: $RESPONSE"
+    echo "Details: $RESPONSE"
   fi
 else
   echo ""
