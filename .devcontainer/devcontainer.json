@@ -1,0 +1,19 @@
+{
+  "name": "Leapr AI Governance Project",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "yzhang.markdown-all-in-one",
+        "shd101wyy.markdown-preview-enhanced",
+        "GrapeCity.gc-excelviewer",
+        "tomoki1207.pdf"
+      ],
+      "settings": {
+        "editor.wordWrap": "on",
+        "editor.fontSize": 14
+      }
+    }
+  },
+  "postCreateCommand": "echo 'Welcome to your Leapr AI Governance Project!'"
+}
