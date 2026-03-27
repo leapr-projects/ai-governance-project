@@ -1,63 +1,24 @@
 #!/bin/bash
 
-echo "🔍 Checking your completed work..."
+echo "Verifying your submission..."
 
-PASS=true
-
-if grep -q "| 1 |  |" checkpoint-1-risk-assessment.md; then
-  echo "❌ Checkpoint 1 incomplete — please fill in your risk matrix"
-  PASS=false
-else
-  echo "✅ Checkpoint 1 complete"
+if [ ! -f "Risk_Assessment.md" ] || [ ! -s "Risk_Assessment.md" ]; then
+  echo "❌ Risk_Assessment.md is missing or empty. Please complete it before submitting."
+  exit 1
 fi
 
-if grep -q "\[Write 2-3 sentences" checkpoint-2-policy.md; then
-  echo "❌ Checkpoint 2 incomplete — please complete your policy"
-  PASS=false
-else
-  echo "✅ Checkpoint 2 complete"
-fi
+echo "✅ Files verified."
+echo ""
+echo "Enter your Leapr credentials to receive your badge:"
+read -p "Leapr User ID: " USER_ID
+read -p "Your email address: " USER_EMAIL
 
-if grep -q "Step 1:  " checkpoint-3-oversight.md; then
-  echo "❌ Checkpoint 3 incomplete — please complete your oversight protocol"
-  PASS=false
-else
-  echo "✅ Checkpoint 3 complete"
-fi
+echo ""
+echo "Submitting for verification..."
 
-if grep -q "\[Where?\]" checkpoint-4-audit.md; then
-  echo "❌ Checkpoint 4 incomplete — please complete your audit framework"
-  PASS=false
-else
-  echo "✅ Checkpoint 4 complete"
-fi
+gh workflow run issue-badge.yml \
+  -f user_id="$USER_ID" \
+  -f user_email="$USER_EMAIL"
 
-if [ "$PASS" = true ]; then
-  echo ""
-  echo "🎉 All checkpoints complete! Submitting your project..."
-  echo ""
-  read -p "Enter your full name: " USER_NAME
-  read -p "Enter your email address: " USER_EMAIL
-  read -p "Enter your Leapr User ID: " USER_ID
-  read -p "Enter your Leapr Project Secret: " PROJECT_SECRET
-
-  RESPONSE=$(curl -s -X POST "https://rlefumadvzpijgxjogoo.supabase.co/functions/v1/issue-badge" \
-    -H "Content-Type: application/json" \
-    -d "{\"name\": \"$USER_NAME\", \"email\": \"$USER_EMAIL\", \"user_id\": \"$USER_ID\", \"project_secret\": \"$PROJECT_SECRET\", \"project_id\": \"ai-governance\"}")
-
-  SUCCESS=$(echo $RESPONSE | grep -o '"success":true')
-
-  if [ -n "$SUCCESS" ]; then
-    echo ""
-    echo "✅ Your Leapr AI Governance Practitioner badge is on its way!"
-    echo "📧 Check your email at $USER_EMAIL"
-    echo "🔗 Add it directly to your LinkedIn profile."
-  else
-    echo ""
-    echo "❌ Something went wrong. Please contact support@leapr.co"
-    echo "Details: $RESPONSE"
-  fi
-else
-  echo ""
-  echo "Please complete the remaining checkpoints and run this script again."
-fi
+echo ""
+echo "✅ Submitted! Return to Leapr — your badge will appear within 60 seconds."
