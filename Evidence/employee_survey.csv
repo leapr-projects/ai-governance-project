@@ -1,0 +1,9 @@
+department,employee_count,using_ai_tools_for_client_data,tool_used,aware_of_policy
+Sales,45,yes,ChatGPT,no
+Marketing,30,yes,ChatGPT,no
+Legal,12,no,None,yes
+Finance,28,yes,ChatGPT,no
+HR,15,no,None,no
+Operations,40,yes,ChatGPT + Copilot,no
+IT,20,no,None,yes
+Executive,8,no,None,yes
